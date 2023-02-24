@@ -1,0 +1,30 @@
+syntax = "v1"
+
+info(
+    title: "type title here"
+    desc: "type desc here"
+    author: "type author here"
+    email: "type email here"
+    version: "type version here"
+)
+
+
+type request {
+    username     string `json:"username" validate:"required"`//用户名
+    Password     string `json:"password" validate:"required"`//密码
+}
+
+type response {
+    Token        string `json:"token"`//用户token
+    TokenType    string `json:"tokenType"`//用户token类型
+    ExpiresIn    int32  `json:"expiresIn"`//用户token过期时间
+}
+
+@server(
+    jwt: Auth
+    group: template
+)
+service template {
+    @handler handlerName
+    get /users/id/:userId (request) returns (response)
+}
