@@ -13,8 +13,10 @@ import (
 type ZRpcContext struct {
 	// Plugin is api date
 	Plugin *plugin.Plugin
-	// Sre is the source file of the proto.
+	// Src is the source file of the proto.
 	Src string
+	// ProName is the project name.
+	ProName string
 	// ProtoCmd is the command to generate proto files.
 	ProtocCmd string
 	// ProtoGenGrpcDir is the directory to store the generated proto files.
@@ -57,7 +59,7 @@ func (g *Generator) Generate(zctx *ZRpcContext) error {
 		return err
 	}
 
-	err = g.GenProto(zctx.Plugin, zctx.Src)
+	err = g.GenProto(zctx.Plugin, zctx.Src, zctx.ProName)
 	if err != nil {
 		return err
 	}

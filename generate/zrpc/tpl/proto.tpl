@@ -5,25 +5,27 @@ option go_package="{{.goPackage}}";
 
 {{- range $import := .imports}}
 import "$import";
-{{- end}}
+{{end}}
 
 {{- range $message := .messages}}
-message $message.Request.Name {
-    {{- range $param := $message.Request.Params}}
-    $param.Name
+{{- range $comment := $message.Comments}}
+{{$comment}}
+{{- end}}
+message {{$message.Name}} {
+    {{- range $field := $message.Fields}}
+    {{$field.Type}} {{$field.Name}} = {{$field.Index}}; {{$field.Comment}}
     {{- end}}
 }
-
-message $message.Response.Name {
-   {{- range $param := $message.Params}}
-   {{- end}}
-}
-{{- end}}
+{{end}}
 
 {{- range $service := .services}}
-service $service.Name}} {
-  {{- range $rpcFunc := $service.RpcFuncList}}
-  rpc $rpcFunc.Name ($rpcFunc.Request) returns($rpcFunc.Response);
+{{$service.Comment}}
+service {{$service.Name}} {
+  {{- range $rpcCall := $service.RpcCalls}}
+  {{- range $comment := $rpcCall.Comments}}
+  {{$comment}}
+  {{- end}}
+  rpc {{$rpcCall.Name}}({{$rpcCall.Request}}) returns({{$rpcCall.Response}});
   {{- end}}
 }
-{{- end}}
+{{end}}

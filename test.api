@@ -8,23 +8,42 @@ info(
     version: "type version here"
 )
 
+// aaaaaaaa
+// aaaaaaaa
+type uInfo {
+    username string `json:"username" validate:"required"`//用户名
+    Password string `json:"password" validate:"required"`//密码
+}
 
 type request {
-    username     string `json:"username" validate:"required"`//用户名
-    Password     string `json:"password" validate:"required"`//密码
+    username string `json:"username" validate:"required"`//用户名
+    Password string `json:"password" validate:"required"`//密码
+    U uInfo `json:"u" validate:"required"`
+    C []int `json:"c" validate:"required"`
+    M map[int]string `json:"m"`
+    P *string `json:"p"`
+
 }
 
 type response {
-    Token        string `json:"token"`//用户token
-    TokenType    string `json:"tokenType"`//用户token类型
-    ExpiresIn    int32  `json:"expiresIn"`//用户token过期时间
+    Token string `json:"token"`        //用户token
+    TokenType string `json:"tokenType"`//用户token类型
+    ExpiresIn int32 `json:"expiresIn"` //用户token过期时间
 }
 
 @server(
     jwt: Auth
     group: template
 )
+
+//templateaaaaaaaaa
 service template {
-    @handler handlerName
+    //handlerName
+    @handler handlerName1
     get /users/id/:userId (request) returns (response)
+
+    //handlerName
+    @handler handlerName2
+    get /users/id/:userId2 (request) returns (response)
 }
+

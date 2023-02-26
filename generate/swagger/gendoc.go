@@ -93,19 +93,6 @@ func renderServiceRoutes(service spec.Service, groups []spec.Group, paths swagge
 							Type:     "string",
 						}
 
-						// extend the comment functionality
-						// to allow query string parameters definitions
-						// EXAMPLE:
-						// @doc(
-						// 	summary: "Get Cart"
-						// 	description: "returns a shopping cart if one exists"
-						// 	customerId: "customer id"
-						// )
-						//
-						// the format for a parameter is
-						// paramName: "the param description"
-						//
-
 						prop := route.AtDoc.Properties[key]
 						if prop != "" {
 							// remove quotes
@@ -198,7 +185,6 @@ func renderServiceRoutes(service spec.Service, groups []spec.Group, paths swagge
 				} else {
 
 					reqRef := fmt.Sprintf("#/definitions/%s", route.RequestType.Name())
-
 					if len(route.RequestType.Name()) > 0 {
 						schema := swaggerSchemaObject{
 							schemaCore: schemaCore{

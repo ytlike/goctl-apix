@@ -41,14 +41,15 @@ func zRpcGen(in *plugin.Plugin, pronName string) error {
 	pbOutDir := in.Dir + "/" + pronName
 	src := pronName + ".proto"
 	ctx := &zrpc.ZRpcContext{
-		Plugin: in,
-		Src:    src,
+		Plugin:  in,
+		Src:     src,
+		ProName: pronName,
 		ProtocCmd: fmt.Sprintf("protoc -I=%s %s --go_out=%s --go_opt=Mbase/common.proto=./base --go-grpc_out=%s",
 			in.Dir, src, pbOutDir, pbOutDir),
 		IsGooglePlugin: true,
 		GoOutput:       pbOutDir,
 		GrpcOutput:     pbOutDir,
-		Output:         in.Dir,
+		Output:         pbOutDir,
 	}
 
 	return g.Generate(ctx)
