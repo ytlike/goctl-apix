@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/zeromicro/go-zero/tools/goctl/api/spec"
-	"github.com/zeromicro/go-zero/tools/goctl/plugin"
 	"net/http"
 	"os"
 	"reflect"
@@ -15,10 +14,10 @@ import (
 	"unsafe"
 )
 
-func (g *Generator) GenDoc(p *plugin.Plugin, host string, basePath string, outDir string, proName string) error {
-	title, _ := strconv.Unquote(p.Api.Info.Properties["title"])
-	version, _ := strconv.Unquote(p.Api.Info.Properties["version"])
-	desc, _ := strconv.Unquote(p.Api.Info.Properties["desc"])
+func (g *Generator) GenDoc(dctx *DocContext) error {
+	title, _ := strconv.Unquote(dctx.Plugin.Api.Info.Properties["title"])
+	version, _ := strconv.Unquote(dctx.Plugin.Api.Info.Properties["version"])
+	desc, _ := strconv.Unquote(dctx.Plugin.Api.Info.Properties["desc"])
 
 	s := swaggerObject{
 		Swagger:           "2.0",
@@ -34,11 +33,11 @@ func (g *Generator) GenDoc(p *plugin.Plugin, host string, basePath string, outDi
 			Description: desc,
 		},
 	}
-	if len(host) > 0 {
-		s.Host = host
+	if len(dctx.Host) > 0 {
+		s.Host = dctx.Host
 	}
-	if len(basePath) > 0 {
-		s.BasePath = basePath
+	if len(dctx.BasePath) > 0 {
+		s.BasePath = dctx.BasePath
 	}
 
 	s.SecurityDefinitions = swaggerSecurityDefinitionsObject{}
@@ -50,9 +49,9 @@ func (g *Generator) GenDoc(p *plugin.Plugin, host string, basePath string, outDi
 	s.SecurityDefinitions["apiKey"] = newSecDefValue
 
 	requestResponseRefs := refMap{}
-	renderServiceRoutes(p.Api.Service, p.Api.Service.Groups, s.Paths, requestResponseRefs)
+	renderServiceRoutes(dctx.Plugin.Api.Service, dctx.Plugin.Api.Service.Groups, s.Paths, requestResponseRefs)
 	m := messageMap{}
-	renderReplyAsDefinition(s.Definitions, m, p.Api.Types, requestResponseRefs)
+	renderReplyAsDefinition(s.Definitions, m, dctx.Plugin.Api.Types, requestResponseRefs)
 
 	var formatted bytes.Buffer
 	enc := json.NewEncoder(&formatted)
@@ -61,11 +60,9 @@ func (g *Generator) GenDoc(p *plugin.Plugin, host string, basePath string, outDi
 		return fmt.Errorf("json encode err:%v", err)
 	}
 
-	output := outDir + "/" + proName + ".json"
-	if err := os.WriteFile(output, formatted.Bytes(), 0666); err != nil {
+	if err := os.WriteFile(dctx.SwaggerFile, formatted.Bytes(), 0666); err != nil {
 		return fmt.Errorf("json encode err:%v", err)
 	}
-
 	return nil
 }
 

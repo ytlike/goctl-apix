@@ -19,12 +19,7 @@ var (
 			Name:   "apix",
 			Usage:  "from api file to zrpc project and swagger doc file",
 			Action: action.Generator,
-			Flags: []cli.Flag{
-				&cli.StringFlag{
-					Name:  "proName",
-					Usage: "project name",
-				},
-			},
+			Flags:  []cli.Flag{},
 		},
 	}
 )
@@ -40,19 +35,19 @@ func main1() {
 }
 
 func main() {
-	api, err := parser.Parse("./test.api")
+	api, err := parser.Parse("E:\\work\\goctl-apix\\interface\\userCenter\\test.api")
 	if err != nil {
 		log.Fatalf("api parse err:%v", err)
 	}
 
 	p := &plugin.Plugin{
 		Api:         api,
-		ApiFilePath: "./",
+		ApiFilePath: "E:\\work\\goctl-apix\\interface\\userCenter\\test.api",
 		Style:       "gozero",
-		Dir:         ".",
+		Dir:         "./out",
 	}
 
-	err = generate.Do(p, "test")
+	err = generate.Do(p, nil)
 	if err != nil {
 		log.Fatalf("generate err:%v", err)
 	}

@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/zeromicro/go-zero/tools/goctl/api/spec"
 	"github.com/zeromicro/go-zero/tools/goctl/plugin"
+	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 	"os"
+	"path/filepath"
 	"text/template"
 )
 
@@ -42,9 +44,10 @@ type (
 	}
 )
 
-func (g *Generator) GenProto(p *plugin.Plugin, src, proName string) error {
+func (g *Generator) GenProto(p *plugin.Plugin, protoFile, apiName string) error {
+	abs := filepath.Dir(protoFile)
+	pathx.MkdirIfNotExist(abs)
 
-	protoFile := p.ApiFilePath + "/" + src
 	protoTpl := template.Must(template.New("protoTpl").Parse(protoTemplate))
 	fp, err := os.OpenFile(protoFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
 	if err != nil {
@@ -54,10 +57,10 @@ func (g *Generator) GenProto(p *plugin.Plugin, src, proName string) error {
 	api := p.Api
 	protoTpl.Execute(fp, map[string]interface{}{
 		"package": func() interface{} {
-			return proName
+			return apiName
 		}(),
 		"goPackage": func() interface{} {
-			return "./" + proName
+			return "./" + apiName
 		}(),
 		"imports": func() interface{} {
 			return nil // todo

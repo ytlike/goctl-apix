@@ -13,10 +13,10 @@ import (
 type ZRpcContext struct {
 	// Plugin is api date
 	Plugin *plugin.Plugin
-	// Src is the source file of the proto.
-	Src string
-	// ProName is the project name.
-	ProName string
+	// ApiName is the api file name.
+	ApiName string
+	// ProtoFile is the protoBuffer file path.
+	ProtoFile string
 	// ProtoCmd is the command to generate proto files.
 	ProtocCmd string
 	// ProtoGenGrpcDir is the directory to store the generated proto files.
@@ -39,6 +39,7 @@ type ZRpcContext struct {
 // code storage directory, and proto import parameters to control
 // the source file and target location of the rpc service that needs to be generated
 func (g *Generator) Generate(zctx *ZRpcContext) error {
+	// 创建zRpc项目输出目录
 	abs, err := filepath.Abs(zctx.Output)
 	if err != nil {
 		return err
@@ -59,13 +60,13 @@ func (g *Generator) Generate(zctx *ZRpcContext) error {
 		return err
 	}
 
-	err = g.GenProto(zctx.Plugin, zctx.Src, zctx.ProName)
+	err = g.GenProto(zctx.Plugin, zctx.ProtoFile, zctx.ApiName)
 	if err != nil {
 		return err
 	}
 
 	p := parser.NewDefaultProtoParser()
-	proto, err := p.Parse(zctx.Src, zctx.Multiple)
+	proto, err := p.Parse(zctx.ProtoFile, zctx.Multiple)
 	if err != nil {
 		return err
 	}
