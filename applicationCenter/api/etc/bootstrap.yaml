@@ -1,0 +1,14 @@
+nacos:
+  discovery:
+    host: ${NACOS-HOST:AOS-NACOS}
+    port: ${NACOS-PORT:8848}
+    timeout: 10000
+    namespaceId: ${NACOS-NAMESPACE:public}
+    group: "DEFAULT_GROUP"
+  configure:
+    host: ${NACOS-HOST:AOS-NACOS}
+    port: ${NACOS-PORT:8848}
+    timeout: 10000
+    namespaceId: ${NACOS-NAMESPACE:public}
+    group: "DEFAULT_GROUP"
+    dataId: "applicationCenter-api.yml"

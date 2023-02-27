@@ -1,0 +1,67 @@
+type (
+    ApiTargetAppListReq {
+        Page int32 `json:"page" validate:"required"`
+        Size int32 `json:"size" validate:"required"`
+    }
+
+    ApiTargetAppListResp {
+        AppList []ApiTargetApp `json:"appList"`
+    }
+
+    ApiTargetApp {
+        AppCode string `json:"appCode"`
+        AppName string `json:"appName"`
+        AppIcon string `json:"appIcon"`
+        Watermark *string `json:"watermark,optional"`
+        WatermarkPosition *int32 `json:"watermarkPosition,optional"`
+    }
+
+    TestGetPathReq {
+        Id string `path:"id"`
+    }
+
+    TestGetQueryReq {
+        Username string `form:"username"`
+        Password string `form:"password"`
+    }
+
+    TestGetJsonReq {
+        Username string `json:"username"`
+        Password string `json:"password"`
+    }
+
+    TestPostFormReq {
+        Username string `form:"username"`
+        Password string `form:"password"`
+    }
+
+    TestPostJsonReq {
+        Username string `json:"username"`
+        Password string `json:"password"`
+    }
+)
+
+@server(
+    group: api
+    prefix: api
+)
+service application {
+    @doc "查询可投递的应用列表"
+    @handler targetAppList
+    post /targetAppList (ApiTargetAppListReq) returns (ApiTargetAppListResp)
+
+    @handler testGetPath
+    get /testGetPath/:id (TestGetPathReq)
+
+    @handler testGetQuery
+    get /testGetQuery (TestGetQueryReq)
+
+    @handler testGetJson
+    get /testGetJson (TestGetJsonReq)
+
+    @handler testPostForm
+    post /testPostForm(TestPostFormReq)
+
+    @handler testPostJson
+    post /testPostJson(TestPostJsonReq)
+}

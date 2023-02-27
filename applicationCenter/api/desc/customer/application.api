@@ -1,0 +1,46 @@
+type (
+    CustomerUpdateStateReq {
+        AppCode string `json:"appCode" validate:"required"`
+        State int32 `json:"state" validate:"gte=0,lte=1"`
+    }
+
+    CreateApplicationReq {
+        AppName string `json:"appName" validate:"required"`
+        AppDesc string `json:"appDesc"`
+    }
+
+    OpenApplicationReq {
+        ApplicationId int64 `json:"applicationId" validate:"required"`
+        Option int32 `json:"option" validate:"required,gte=1,lte=3"`
+        AppAbilityUrl string `json:"appAbilityUrl,optional"`
+    }
+
+    UpdateApplicationInfoReq {
+        AppId int64 `json:"appId" validate:"required"`
+        AppName string `json:"appName" validate:"required"`
+        AppIconFileId string `json:"appIconFileId" validate:"required"`
+        AppDesc string `json:"appDesc" validate:"required"`
+    }
+)
+
+@server(
+    group: customer
+    prefix: customer
+)
+service application {
+    @doc "应用启用/禁用"
+    @handler updateState
+    post /updateState (CustomerUpdateStateReq)
+
+    @doc "创建应用"
+    @handler create
+    post /create (CreateApplicationReq)
+
+    @doc "应用开通"
+    @handler open
+    post /open (OpenApplicationReq)
+
+    @doc "修改应用信息"
+    @handler updateInfo
+    post /updateInfo (UpdateApplicationInfoReq)
+}

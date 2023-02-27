@@ -1,0 +1,12 @@
+syntax = "v1"
+
+info(
+	author: "qinsheng"
+	date: "2022-10-18"
+	desc: "亲笔签开放平台-应用中心"
+)
+
+import (
+	"api/application.api"
+	"customer/application.api"
+)

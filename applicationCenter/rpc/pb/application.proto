@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb";
+
+message ApiTargetAppListReq {
+  int32 page = 1;
+  int32 size = 2;
+}
+
+message ApiTargetAppListResp {
+  repeated ApiTargetApp appList = 1;
+}
+
+message ApiTargetApp {
+  string appCode = 1;
+  string appName = 2;
+  string appIcon = 3;
+  string watermark = 4;
+  int32 watermarkPosition = 5;
+}
+
+service ApplicationApi {
+  // 查询可投递的应用列表
+  rpc ApiTargetAppList(ApiTargetAppListReq) returns(ApiTargetAppListResp);
+}
+
+message CustomerUpdateStateReq {
+  string appCode = 1;
+  int32 state = 2;
+}
+
+message CustomerUpdateStateResp {
+}
+
+
+message CreateApplicationReq {
+  string appName = 1;
+  string appDesc = 2;
+  int64  appDeveloperId = 3;
+}
+
+message CreateApplicationResp {
+}
+
+message OpenApplicationReq{
+  int64 applicationId = 1;
+  int32 option = 2;
+  string abilityUrl = 3;
+}
+
+message OpenApplicationResp{
+}
+
+message UpdateApplicationInfoReq{
+  int64 appId = 1;
+  string appName = 2;
+  string appIconFileId = 3;
+  string appDesc = 4;
+}
+message UpdateApplicationInfoResp{
+
+}
+
+message  CreateApplicationCallbackReq {
+  string AppCode = 1;
+  string AppName = 2;
+  string CallbackUrl = 3;
+  string RetryConfig = 4;
+}
+
+message CreateApplicationCallbackResp{
+
+}
+
+message  UpdateApplicationCallbackReq {
+  string AppCode = 1;
+  string AppName = 2;
+  string CallbackUrl = 3;
+  string RetryConfig = 4;
+}
+
+message UpdateApplicationCallbackResp{
+
+}
+
+message GetApplicationCallbackReq {
+  string AppCode = 1;
+}
+
+message GetApplicationCallbackResp{
+  string AppCode = 1;
+  string AppName = 2;
+  string CallbackUrl = 3;
+  string RetryConfig = 4;
+}
+
+message  CreateApplicationCallbackOrderReq {
+  string RequestId = 1;
+  string AppCode = 2;
+  string AppName = 3;
+  string CallbackUrl = 4;
+  string RetryConfig = 5;
+  int32 Status = 6;
+  string Param = 7;
+  string TaskCode = 8;
+  string Message = 9;
+}
+
+service ApplicationCustomer {
+  // 应用启用/禁用
+  rpc CustomerUpdateState(CustomerUpdateStateReq) returns(CustomerUpdateStateResp);
+
+  // 创建应用
+  rpc CreateApplication(CreateApplicationReq) returns(CreateApplicationResp);
+
+  // 开通应用
+  rpc OpenApplication(OpenApplicationReq) returns(OpenApplicationResp);
+
+  // 修改应用信息
+  rpc UpdateApplicationInfo(UpdateApplicationInfoReq) returns(UpdateApplicationInfoResp);
+}
