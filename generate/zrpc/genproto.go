@@ -57,10 +57,10 @@ func (g *Generator) GenProto(p *plugin.Plugin, protoFile, apiName string) error 
 	api := p.Api
 	protoTpl.Execute(fp, map[string]interface{}{
 		"package": func() interface{} {
-			return apiName
+			return "pb"
 		}(),
 		"goPackage": func() interface{} {
-			return "./" + apiName
+			return filepath.Join(abs, "pb")
 		}(),
 		"imports": func() interface{} {
 			return nil // todo
@@ -111,9 +111,21 @@ func (g *Generator) GenProto(p *plugin.Plugin, protoFile, apiName string) error 
 
 			for _, route := range as.Routes() {
 				rpc := rpcCall{
-					Name:     route.Handler,
-					Request:  route.RequestType.Name(),
-					Response: route.ResponseType.Name(),
+					Name: route.Handler,
+					Request: func() string {
+						if route.RequestType != nil {
+							return route.RequestType.Name()
+						}
+
+						return "Empty"
+					}(),
+					Response: func() string {
+						if route.ResponseType != nil {
+							return route.ResponseType.Name()
+						}
+
+						return "Empty"
+					}(),
 					Comments: route.HandlerDoc,
 				}
 				s.RpcCalls = append(s.RpcCalls, rpc)

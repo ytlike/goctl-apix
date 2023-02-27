@@ -30,8 +30,8 @@ func docGen(in *plugin.Plugin) error {
 	g := swgger.NewGenerator()
 
 	apiDir, apiName := paresApiFilePath(in.ApiFilePath)
-	swaggerFile := fmt.Sprintf("%s/doc/%s.json", apiDir, apiName)
-	outDir := fmt.Sprintf("%s/doc/", apiDir)
+	swaggerFile := filepath.Join(apiDir, "doc", fmt.Sprintf("%s.json", apiName))
+	outDir := filepath.Join(apiDir, "doc")
 	dCtx := &swgger.DocContext{
 		Plugin:      in,
 		SwaggerFile: swaggerFile,
@@ -56,7 +56,7 @@ func zRpcGen(in *plugin.Plugin) error {
 		Plugin:    in,
 		ApiName:   apiName,
 		ProtoFile: protoFile,
-		ProtocCmd: fmt.Sprintf("protoc -I=%s %s --go_out=%s --go_opt=Mbase/common.proto=./base --go-grpc_out=%s",
+		ProtocCmd: fmt.Sprintf("protoc -I=%s %s --go_out=%s --go-grpc_out=%s",
 			pbOutDir, apiName+".proto", pbOutDir, pbOutDir),
 		IsGooglePlugin: true,
 		GoOutput:       pbOutDir,

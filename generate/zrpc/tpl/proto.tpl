@@ -7,6 +7,8 @@ option go_package="{{.goPackage}}";
 import "$import";
 {{end}}
 
+message Empty{}
+
 {{- range $message := .messages}}
 {{- range $comment := $message.Comments}}
 {{$comment}}
