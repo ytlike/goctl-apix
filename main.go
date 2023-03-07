@@ -43,7 +43,7 @@ func main() {
 	p := &plugin.Plugin{
 		Api:         api,
 		ApiFilePath: "E:\\work\\goctl-apix\\interface\\userCenter\\test.api",
-		Style:       "gozero",
+		Style:       "goZero",
 		Dir:         "./out",
 	}
 
